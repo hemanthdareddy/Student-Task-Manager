@@ -83,7 +83,7 @@ Follow these steps to get a local copy of the project up and running on your mac
     ```bash
     pip install -r requirements.txt
     ```
-    *(If you don't have a `requirements.txt` file, you should create one now by running `pip freeze > requirements.txt` in your activated virtual environment locally, then add this file to your repository.)*
+    
 
 5.  **Apply database migrations:**
     ```bash
@@ -120,7 +120,6 @@ Contributions are welcome! If you have suggestions for improvements or find any 
 ### 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-*(You should add a `LICENSE` file to your repository if you haven't already. A common one is the MIT License, which you can easily find online.)*
 
 ---
 
