@@ -106,12 +106,12 @@ Follow these steps to get a local copy of the project up and running on your mac
 ---
 
 ### 📸 Screenshots (Optional but Recommended)
-* Home Page *<img width="1346" height="631" alt="dashboard" src="https://github.com/user-attachments/assets/12d1d2d7-0724-461e-acbb-055374c7405b" />
-* Signup page *<img width="475" height="624" alt="signup" src="https://github.com/user-attachments/assets/005c1f57-c11b-4835-957d-ebdc36b1e990" />
-* Login page *<img width="492" height="616" alt="login" src="https://github.com/user-attachments/assets/1494879e-9793-4eb1-9be7-201cffe29c6d" />
-* subjects adding page*<img width="1318" height="625" alt="subjects" src="https://github.com/user-attachments/assets/b009a986-ddb8-4487-9a4f-a656e2667e66" />
-* dashboard *<img width="1347" height="703" alt="task adding" src="https://github.com/user-attachments/assets/6fd1d6ff-ac50-40f1-9998-f50e4d0d4844" />
-* Acheivements page *<img width="1322" height="609" alt="acheivements" src="https://github.com/user-attachments/assets/9d4e1f36-9986-4f06-9b8e-9eeb6c23c177" />
+* Home Page :-<img width="1346" height="631" alt="dashboard" src="https://github.com/user-attachments/assets/12d1d2d7-0724-461e-acbb-055374c7405b" />
+* Signup page :-<img width="475" height="624" alt="signup" src="https://github.com/user-attachments/assets/005c1f57-c11b-4835-957d-ebdc36b1e990" />
+* Login page :-<img width="492" height="616" alt="login" src="https://github.com/user-attachments/assets/1494879e-9793-4eb1-9be7-201cffe29c6d" />
+* subjects adding page :-<img width="1318" height="625" alt="subjects" src="https://github.com/user-attachments/assets/b009a986-ddb8-4487-9a4f-a656e2667e66" />
+* dashboard :-<img width="1347" height="703" alt="task adding" src="https://github.com/user-attachments/assets/6fd1d6ff-ac50-40f1-9998-f50e4d0d4844" />
+* Acheivements page :-<img width="1322" height="609" alt="acheivements" src="https://github.com/user-attachments/assets/9d4e1f36-9986-4f06-9b8e-9eeb6c23c177" />
 
 ---
 
