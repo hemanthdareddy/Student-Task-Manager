@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Task Master</title>
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        :root {
+            --bg-color: #f0f2f5;
+            --nav-bg: #fff;
+            --text-color-light: #f1f1f1;
+            --text-color-dark: #333;
+            --card-bg: #2f3640; /* Dark card background */
+            --input-bg: #444c56;
+            --logo-gradient: linear-gradient(90deg, #FF6F61, #FFD700);
+            --header-gradient: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            --add-btn-gradient: linear-gradient(90deg, #11998e, #38ef7d);
+            --task-pending-border: #feca57; /* Yellow for pending */
+            --task-completed-border: #38ef7d; /* Green for completed */
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color-dark);
+            font-size: 16px;
+        }
+        #stardust {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; 
+        }
+        /* Consistent Navigation Bar */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 50px; background-color: var(--nav-bg);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 1.5rem; font-weight: 700;
+            background: var(--logo-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links a { text-decoration: none; color: #555; margin-left: 20px; font-weight: 600; }
+        .user-initial {
+            display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--header-gradient);
+            color: white; font-weight: 700; font-size: 1.2rem; margin-left: 20px;
+        }
+        /* Main Dashboard Layout */
+        .main-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr; /* 2/3 for tasks, 1/3 for form/stats */
+            gap: 40px;
+        }
+        .dashboard-header h1 {
+            font-size: 2.5rem; font-weight: 700;
+            background: var(--header-gradient);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin: 0 0 10px 0;
+        }
+        /* Task List Styling */
+        .tasks-container {
+            background: var(--card-bg);
+            color: var(--text-color-light);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .tasks-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid #444c56;
+            padding-bottom: 20px; margin-bottom: 20px;
+        }
+        .tasks-header h2 { margin: 0; font-size: 1.8rem; }
+        .task-item {
+            background-color: #444c56;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--task-pending-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            transition: all 0.3s ease;
+        }
+        .task-item.completed {
+             border-left-color: var(--task-completed-border);
+        }
+        .task-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .task-content {
+            flex-grow: 1;
+        }
+        .task-header-line {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .task-header-line h3 {
+            margin: 0;
+        }
+        .subject-tag {
+            background: var(--header-gradient);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-left: 15px;
+        }
+        .task-description {
+            font-size: 0.9rem; color: #ccc; margin: 10px 0;
+        }
+        .task-details p {
+            margin: 5px 0; font-size: 0.9rem; color: #ddd;
+        }
+        .task-right-section {
+            text-align: right;
+            min-width: 180px;
+            margin-left: 20px;
+        }
+        .countdown {
+            background-color: rgba(0,0,0,0.2);
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        .countdown p {
+            margin: 0 0 5px 0;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #ccc;
+        }
+        .countdown .timer {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--task-pending-border);
+        }
+        .task-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        .task-actions button {
+            background: transparent; border: none; color: #fff;
+            font-size: 1.2rem; cursor: pointer; margin-left: 10px;
+        }
+        /* Add Task Form & Stats Styling */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        .add-task-form, .stats-container {
+            background: var(--card-bg);
+            color: var(--text-color-light);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        .add-task-form h2 { margin-top: 0; }
+        .add-task-form input, .add-task-form textarea, .add-task-form select {
+            width: 100%; padding: 12px; border-radius: 8px;
+            border: 1px solid #555; background: var(--input-bg);
+            color: var(--text-color-light); font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+        }
+        .input-group { margin-bottom: 20px; }
+        .input-group label { display: block; margin-bottom: 5px; font-weight: 600; }
+        .submit-btn {
+            width: 100%; padding: 15px; border: none; border-radius: 8px;
+            background: var(--add-btn-gradient);
+            color: white; font-size: 1.1rem; font-weight: 600; cursor: pointer;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .main-container {
+                grid-template-columns: 1fr; /* Stack columns on smaller screens */
+            }
+        }
+        .task-item.completed {
+     border-left-color: var(--task-completed-border); /* Changes border to green */
+     text-decoration: line-through; /* Crosses out the text */
+     opacity: 0.7; /* Fades it slightly */
+}
+    </style>
+</head>
+<body>
+    <canvas id="stardust"></canvas>
+    <nav>
+        <div class="logo">Task Master</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            {% if user.is_authenticated %}
+                <a href="{% url 'subjects' %}">Subjects</a>
+                <a href="{% url 'achievements' %}">Achievements</a>
+                <a href="/logout/">Logout</a>
+                <div class="user-initial">{{ user.username|first|upper }}</div>
+            {% else %}
+                <a href="/login/">Login</a>
+                <a href="/signup/">Sign Up</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <main class="main-container">
+        <div class="tasks-main">
+             <header class="dashboard-header">
+                <h1>Your Dashboard</h1>
+                <p>Welcome back, {{ user.username }}! Here's a look at your current tasks.</p>
+            </header>
+            <section class="tasks-container">
+                <div class="tasks-header">
+                    <h2>My Tasks</h2>
+                </div>
+                
+                <div class="tasks-list">
+                    {% for task in tasks %}
+                        <div class="task-item {% if task.completed %}completed{% endif %}"
+                             data-due-date="{{ task.due_date|date:'Y-m-d' }}"
+                             data-due-time="{{ task.due_time|time:'H:i:s' }}">
+                        
+                            <div class="task-content">
+                                <div class="task-header-line">
+                                    <h3>{{ task.title }}</h3>
+                                    {% if task.subject %}
+                                        <span class="subject-tag">{{ task.subject.name }}</span>
+                                    {% endif %}
+                                </div>
+                                {% if task.description %}
+                                    <p class="task-description"><strong>Work:</strong> {{ task.description }}</p>
+                                {% endif %}
+                                <div class="task-details">
+                                    {% if task.due_date %}
+                                        <p><strong>Due Date:</strong> {{ task.due_date|date:"F d, Y" }}</p>
+                                    {% endif %}
+                                    {% if task.due_time %}
+                                        <p><strong>Due Time:</strong> {{ task.due_time|time:"g:i A" }}</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        
+                            <div class="task-right-section">
+                                {% if not task.completed and task.due_date %}
+                                    <div class="countdown">
+                                        <p>Time Remaining</p>
+                                        <span class="timer">--d --h --m --s</span>
+                                    </div>
+                                {% endif %}
+                                <div class="task-actions">
+    <form action="{% url 'complete_task' task.id %}" method="post" onsubmit="return handleFormSubmit(event)" style="display: inline-flex; align-items: center;">
+        {% csrf_token %}
+        <input 
+            type="checkbox" 
+            name="completed" 
+            id="task-{{ task.id }}"
+            onchange="this.form.requestSubmit()"
+            {% if task.completed %}checked{% endif %}
+        >
+        <label for="task-{{ task.id }}" style="margin-left: 10px; cursor: pointer;">Completed</label>
+    </form>
+
+    <form action="{% url 'delete_task' task.id %}" method="post" style="display: inline;">
+        {% csrf_token %}
+        <button type="submit" title="Delete Task">🗑️</button>
+    </form>
+</div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>You have no tasks yet. Use the form to add your first one!</p>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+
+        <aside class="sidebar">
+            <section class="add-task-form">
+                <h2>Add a New Task</h2>
+                <form method="post">
+                    {% csrf_token %}
+            
+                    <div class="input-group">
+                        <label for="{{ form.title.id_for_label }}">Task Title</label>
+                        {{ form.title }}
+                    </div>
+                    <div class="input-group">
+                        <label for="{{ form.subject.id_for_label }}">Subject</label>
+                        {{ form.subject }}
+                    </div>
+                    <div class="input-group">
+                        <label for="{{ form.description.id_for_label }}">Description (Optional)</label>
+                        {{ form.description }}
+                    </div>
+                    <div class="input-group">
+                        <label for="{{ form.due_date.id_for_label }}">Due Date (Optional)</label>
+                        {{ form.due_date }}
+                    </div>
+                    <div class="input-group">
+                        <label for="{{ form.due_time.id_for_label }}">Due Time (Optional)</label>
+                        {{ form.due_time }}
+                    </div>
+            
+                    <button type="submit" class="submit-btn">Add Task</button>
+                </form>
+            </section>
+            
+            <section class="stats-container">
+                <h2>Your Stats</h2>
+                <p><strong>Tasks Completed:</strong> 0</p>
+                <p><strong>Tasks Pending:</strong> {{ tasks.count }}</p>
+            </section>
+        </aside>
+    </main>
+
+    <script>
+        // Stardust background script
+        const canvas = document.getElementById('stardust');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let stars = [];
+        for (let i = 0; i < 100; i++) { stars.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, radius: Math.random() * 1.5, vx: Math.floor(Math.random() * 50) - 25, vy: Math.floor(Math.random() * 50) - 25 }); }
+        function draw() { ctx.clearRect(0,0,canvas.width,canvas.height); ctx.globalCompositeOperation = "lighter"; for (let i = 0, x = stars.length; i < x; i++) { let s = stars[i]; ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(s.x, s.y, s.radius, 0, 2 * Math.PI); ctx.fill(); } }
+        function update() { for (let i = 0, x = stars.length; i < x; i++) { let s = stars[i]; s.x += s.vx / 60; s.y += s.vy / 60; if (s.x < 0 || s.x > canvas.width) s.vx = -s.vx; if (s.y < 0 || s.y > canvas.height) s.vy = -s.vy; } }
+        function tick() { draw(); update(); requestAnimationFrame(tick); }
+        tick();
+
+        // Countdown Timer Logic
+        function initializeCountdowns() {
+            const taskItems = document.querySelectorAll('.task-item');
+
+            taskItems.forEach(task => {
+                const dueDate = task.dataset.dueDate;
+                const dueTime = task.dataset.dueTime || '00:00:00';
+                
+                if (!dueDate) return;
+
+                const deadline = new Date(`${dueDate}T${dueTime}`).getTime();
+                const timerSpan = task.querySelector('.timer');
+                
+                if (!timerSpan) return;
+
+                const interval = setInterval(() => {
+                    const now = new Date().getTime();
+                    const distance = deadline - now;
+
+                    if (distance < 0) {
+                        clearInterval(interval);
+                        timerSpan.innerHTML = "DEADLINE PASSED";
+                        return;
+                    }
+
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    timerSpan.innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+                }, 1000);
+            });
+        }
+        document.addEventListener('DOMContentLoaded', initializeCountdowns);
+        function triggerConfetti() {
+    // Settings for a "curtain" of confetti from the top
+    const defaults = {
+        spread: 90,
+        ticks: 100,
+        gravity: 0.2, // Particles fall slowly
+        decay: 0.94,
+        startVelocity: 10,
+         zIndex: 999 
+    };
+
+    // Fire a blast from the top-left
+    confetti({
+        ...defaults,
+        particleCount: 50,
+        origin: { x: 0, y: 0 }, // Top-left corner
+        angle: 45
+    });
+
+    // Fire another blast from the top-right
+    confetti({
+        ...defaults,
+        particleCount: 50,
+        origin: { x: 1, y: 0 }, // Top-right corner
+        angle: 135
+    });
+}
+// Add this new function to your script tag
+function handleFormSubmit(event) {
+    // Prevent the form from submitting immediately
+    event.preventDefault(); 
+
+    // Trigger the confetti blast
+    triggerConfetti();
+
+    // Get the form that was submitted
+    const form = event.target;
+
+    // Wait for 1 second (1000 milliseconds) then submit the form
+    setTimeout(() => {
+        form.submit();
+    }, 2500);
+
+    return false;
+}
+       
+    </script>
+</body>
+</html>

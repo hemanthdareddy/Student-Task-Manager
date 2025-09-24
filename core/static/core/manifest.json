@@ -1,0 +1,20 @@
+{
+    "name": "Task Master",
+    "short_name": "Tasks",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f0f2f5",
+    "theme_color": "#2f3640",
+    "icons": [
+        {
+            "src": "/static/core/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/static/core/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}

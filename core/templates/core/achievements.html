@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Achievements - Task Master</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        :root {
+            --bg-color: #f0f2f5; --nav-bg: #fff; --text-color-dark: #333;
+            --card-bg: #fff; --logo-gradient: linear-gradient(90deg, #FF6F61, #FFD700);
+            --header-gradient: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            --progress-bar-bg: #e0e0e0;
+            --progress-bar-fill: linear-gradient(90deg, #11998e, #38ef7d);
+            /* Badge Category Colors */
+            --workload-bg: #ff6b6b; --consistency-bg: #48dbfb; --special-bg: #feca57;
+            /* Badge Tier Borders */
+            --bronze-border: #cd7f32; --silver-border: #c0c0c0; --gold-border: #ffd700;
+        }
+        body { font-family: 'Poppins', sans-serif; margin: 0; background-color: var(--bg-color); color: var(--text-color-dark); }
+        nav { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background-color: var(--nav-bg); box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .logo { font-size: 1.5rem; font-weight: 700; background: var(--logo-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .nav-links { display: flex; align-items: center; }
+        .nav-links a { text-decoration: none; color: #555; margin-left: 20px; font-weight: 600; }
+        .user-initial { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; border-radius: 50%; background: var(--header-gradient); color: white; font-weight: 700; font-size: 1.2rem; margin-left: 20px; }
+        .main-container { max-width: 1000px; margin: 40px auto; padding: 20px; }
+        .header h1 { font-size: 2.5rem; font-weight: 700; background: var(--header-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
+        
+        /* Progress Bar Styles */
+        .progress-section { margin-bottom: 40px; }
+        .progress-bar-container {
+            width: 100%;
+            height: 20px;
+            background-color: var(--progress-bar-bg);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--progress-bar-fill);
+            border-radius: 10px;
+            transition: width 1s ease-in-out;
+        }
+        .progress-label { text-align: center; font-weight: 600; margin-top: 10px; }
+
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .badge-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .badge-icon {
+            font-size: 4rem; padding: 20px; border-radius: 50%;
+            display: inline-block; margin-bottom: 15px; color: white;
+            border-style: solid; border-width: 5px;
+        }
+        .badge-card h2 { margin: 0 0 10px 0; }
+        .badge-card p { color: #555; margin: 0; }
+
+        /* Locked Badge Styling */
+        .locked {
+            filter: grayscale(100%);
+            opacity: 0.6;
+        }
+        .locked h2, .locked p {
+            color: #999;
+        }
+        .locked:hover {
+             transform: translateY(-5px); /* Still give a little hover effect */
+        }
+
+        /* Dynamic Badge Styling */
+        .badge-workload { background-color: var(--workload-bg); }
+        .badge-consistency { background-color: var(--consistency-bg); }
+        .badge-special { background-color: var(--special-bg); }
+        .tier-bronze { border-color: var(--bronze-border); }
+        .tier-silver { border-color: var(--silver-border); }
+        .tier-gold { border-color: var(--gold-border); }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">Task Master</div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/dashboard/">Dashboard</a>
+            {% if user.is_authenticated %}
+                <a href="/logout/">Logout</a>
+                <div class="user-initial">{{ user.username|first|upper }}</div>
+            {% endif %}
+        </div>
+    </nav>
+    <main class="main-container">
+        <header class="header">
+            <h1>Your Achievements</h1>
+        </header>
+
+        <section class="progress-section">
+            <div class="progress-bar-container">
+                <div class="progress-bar-fill" style="width: {{ progress_percentage }}%;"></div>
+            </div>
+            <p class="progress-label">You've collected {{ earned_badges.count }} of {{ all_badges.count }} badges!</p>
+        </section>
+
+        <section class="badges-grid">
+            {% for badge in all_badges %}
+                <div class="badge-card {% if badge not in earned_badges %}locked{% endif %}">
+                    <div class="badge-icon badge-{{ badge.category }} tier-{{ badge.tier }}">
+                        {{ badge.icon }}
+                    </div>
+                    <h2>{{ badge.name }}</h2>
+                    <p>{{ badge.description }}</p>
+                </div>
+            {% endfor %}
+        </section>
+    </main>
+</body>
+</html>

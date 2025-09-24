@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Task Master{% endblock %}</title>
+    <link rel="manifest" href="{% static 'core/manifest.json' %}">
+    <style>
+        /* Paste ALL your common CSS here (body, nav, etc.) */
+    </style>
+    {% block styles %}{% endblock %}
+</head>
+<body>
+    <nav>
+        </nav>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    <script>
+        // Register the service worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register("{% static 'core/sw.js' %}");
+        }
+        // Paste any common JS here
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

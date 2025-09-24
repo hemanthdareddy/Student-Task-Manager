@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Task Master</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+        :root {
+            --bg-color: #f0f2f5;
+            --form-bg: #394049; /* Darker background for form container */
+            --text-color: #fff; /* White text for contrast on dark form */
+            --input-bg: #525d6b; /* Darker input background */
+            --input-text-color: #fff;
+            --logo-gradient: linear-gradient(90deg, #FF6F61, #FFD700);
+            --active-tab-color: #65d6df; /* Purple/blue for active signup tab */
+            --button-signup-gradient: linear-gradient(90deg, #28dbcc 0%, #2575fc 100%); /* Purple/blue gradient for signup button */
+            --button-hover-shadow: 0 6px 20px rgba(0,0,0,0.3);
+            --nav-link-color: #555;
+            --nav-link-hover-color: #007bff;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        /* Stardust Animation */
+        #stardust {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: transparent;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--logo-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--nav-link-color);
+            margin-left: 20px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .nav-links a:hover {
+            color: var(--nav-link-hover-color);
+        }
+        .user-initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+    margin-left: 20px;
+}
+        /* Form Specific Styles */
+        .form-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 50px 20px;
+        }
+        .form-box {
+            background: var(--form-bg);
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(238, 241, 21, 0.1);
+            width: 100%;
+            max-width: 400px;
+            color: var(--text-color);
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #444c56;
+        }
+        .tabs a {
+            text-decoration: none;
+            color: #aaa;
+            padding: 10px 20px;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .tabs a.active {
+            color: var(--active-tab-color);
+            border-bottom-color: var(--active-tab-color);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.8rem;
+            background: var(--active-tab-color); /* Use signup gradient color for welcome text */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #555;
+            background: var(--input-bg);
+            color: var(--input-text-color);
+            font-size: 1rem;
+        }
+        .input-group input::placeholder {
+            color: #888;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: var(--button-signup-gradient);
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--button-hover-shadow);
+        }
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            nav { padding: 15px 20px; }
+            .logo { font-size: 1.2rem; }
+            .nav-links a { margin-left: 10px; }
+            .form-box { padding: 30px; }
+            h2 { font-size: 1.5rem; }
+            .submit-btn { padding: 12px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="stardust"></canvas>
+    <nav>
+    <div class="logo">Task Master</div>
+    <div class="nav-links">
+        <a href="/">Home</a>
+        
+        {% if user.is_authenticated %}
+            <a href="/logout/">Logout</a>
+            <div class="user-initial">{{ user.username|first|upper }}</div>
+
+        {% else %}
+            <a href="/login/">Login</a>
+            <a href="/signup/">Sign Up</a>
+        {% endif %}
+    </div>
+</nav>
+    <div class="form-container">
+        <div class="form-box">
+            <div class="tabs">
+                <a href="/signup/" class="active">Sign Up</a>
+                <a href="/login/">Login</a>
+            </div>
+            <h2>Create Your Account</h2>
+           <form method="post">
+    {% csrf_token %}
+
+    {% for field in form %}
+    <div class="input-group">
+        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+        {{ field }}
+        {% if field.help_text %}
+            <small style="color: #aaa; display: block; margin-top: 5px;">{{ field.help_text }}</small>
+        {% endif %}
+        {% for error in field.errors %}
+            <p style="color: #ff6b6b;">{{ error }}</p>
+        {% endfor %}
+    </div>
+    {% endfor %}
+
+    <button type="submit" class="submit-btn">Sign Up</button>
+</form>
+        </div>
+    </div>
+    <script>
+        // Stardust background effect (from index.html)
+        const canvas = document.getElementById('stardust');
+        const ctx = canvas.getContext('2d');
+        let stars = [];
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            stars = [];
+            for (let i = 0; i < 100; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    radius: Math.random() * 1.5,
+                    vx: Math.floor(Math.random() * 50) - 25,
+                    vy: Math.floor(Math.random() * 50) - 25
+                });
+            }
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function drawStardust() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.globalCompositeOperation = "lighter";
+            for (let i = 0, x = stars.length; i < x; i++) {
+                let s = stars[i];
+                ctx.fillStyle = "#fff";
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, s.radius, 0, 2 * Math.PI);
+                ctx.fill();
+            }
+        }
+        function updateStardust() {
+            for (let i = 0, x = stars.length; i < x; i++) {
+                let s = stars[i];
+                s.x += s.vx / 60;
+                s.y += s.vy / 60;
+                if (s.x < 0 || s.x > canvas.width) s.vx = -s.vx;
+                if (s.y < 0 || s.y > canvas.height) s.vy = -s.vy;
+            }
+        }
+        function tickStardust() {
+            drawStardust();
+            updateStardust();
+            requestAnimationFrame(tickStardust);
+        }
+        tickStardust();
+    </script>
+</body>
+</html>
