@@ -107,7 +107,6 @@ Follow these steps to get a local copy of the project up and running on your mac
 
 ### 📸 Screenshots (Optional but Recommended)
 
-<img width="1322" height="609" alt="acheivements" src="https://github.com/user-attachments/assets/1b91bd3e-2f9a-4845-b395-e2de50411e19" />
 
 *(You can add screenshots or GIFs of your application here. This significantly enhances the README.)*
 
