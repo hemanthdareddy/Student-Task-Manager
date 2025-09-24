@@ -129,5 +129,5 @@ Hemanth Dareddy - [hemanthdareddy@gmail.com](mailto:hemanthdareddy@gmail.com)
 
 Project Link: [https://github.com/hemanthdareddy/Student-Task-Manager](https://github.com/hemanthdareddy/Student-Task-Manager)
 
-linked in -[https://www.linkedin.com/in/hemanth-dareddy?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><img src="https://img.shields.io/badge/Connect%20on%20LinkedIn-0077B5?style=social&logo=linkedin](https://www.linkedin.com/in/hemanth-dareddy?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"><img src="https://img.shields.io/badge/Connect%20on%20LinkedIn-0077B5?style=social&logo=linkedin)
+linked in -[https://linkedin/hemanth](https://www.linkedin.com/in/hemanth-dareddy?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app)
 ---
